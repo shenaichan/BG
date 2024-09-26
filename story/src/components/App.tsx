@@ -17,13 +17,13 @@ function App() {
   const [gameState] = useState<GameState>({ numTimesAsked: 0 })
 
   useEffect(() => {
-    setChatHistory(chatHistory => 
-      [...chatHistory, 
+    setChatHistory(
+      [
         { role: 'narrator', 
-          content: STORY[currentPage].content(inputText, memories, gameState) 
+          content: STORY['start'].content(inputText, memories, gameState) 
         }
       ])
-  }, [currentPage])
+  }, [])
 
   function submitText() {
     setChatHistory(chatHistory => 
@@ -33,28 +33,26 @@ function App() {
         }
       ])
     
-    let nextPage: PageName;
-
-    if (inputText.toLowerCase() === 'help') {
-      nextPage = 'help';
-    }
-    else {
-      nextPage = STORY[currentPage].next(inputText.toLowerCase(), memories, gameState)
-    }
-
-    // setGameState(gameState => ({ ...gameState, numTimesAsked: gameState.numTimesAsked + 1 }))
-
-    if (nextPage !== currentPage) {
-      setCurrentPage(nextPage)
-    }
-    else {
+    if (inputText.toLowerCase() === 'help' || inputText.toLowerCase() === 'look') {
       setChatHistory(chatHistory => 
         [...chatHistory, 
           { role: 'narrator', 
-            content: STORY[currentPage].content(inputText, memories, gameState) 
+            content: STORY[inputText.toLowerCase() as PageName].content(inputText, memories, gameState) 
           }
         ])
     }
+    else {
+      const nextPage = STORY[currentPage].next(inputText.toLowerCase(), memories, gameState)
+      setCurrentPage(nextPage)
+      setChatHistory(chatHistory => 
+        [...chatHistory, 
+          { role: 'narrator', 
+            content: STORY[nextPage].content(inputText, memories, gameState) 
+          }
+        ])
+    }
+
+    // setGameState(gameState => ({ ...gameState, numTimesAsked: gameState.numTimesAsked + 1 }))
 
     setInputText('')
 

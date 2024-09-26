@@ -14,6 +14,7 @@ export type PageName =
     "start"
   | "because"
   | "help"
+  | "look"
 
 export type Page = {
     content: (userInput: string, memories: Memory[], gameState: GameState) => React.ReactNode
@@ -21,6 +22,27 @@ export type Page = {
 }
 
 export const STORY: Record<PageName, Page> = {
+  look: {
+    content: () => {
+      return (
+        <>
+          <p>
+            You are in a Whataburger in Bumfuck Nowhere, New Mexico.
+          </p>
+          <p>
+            Across from you sits a girl smiling at you pleasantly. She is looking at you expectantly.
+          </p>
+          <p>
+            You notice the table is slightly sticky. There are two menus, two glasses of water, two mugs, and a steaming pot of coffee in front of you.
+            Also on the table are your keys, your phone, and your wallet. Next to you on the booth is a toolbox.
+          </p>
+        </>
+      )
+    },
+    next: () => {
+      return "look";
+    }
+  },
   help: {
     content: () => {
       return (
@@ -32,10 +54,13 @@ export const STORY: Record<PageName, Page> = {
             Some commands you can use:
             <ul>
               <li>
-                <b>help</b>: pulls up this menu again
+                <b>help</b>: pull up this menu again
               </li>
               <li>
-                <b>undo</b>
+                <b>undo</b>: undo previous command
+              </li>
+              <li>
+                <b>look</b>: look around the scene
               </li>
             </ul>
           </p>
