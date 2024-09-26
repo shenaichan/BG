@@ -32,8 +32,15 @@ function App() {
           content: <p>{`> ${inputText}`}</p> 
         }
       ])
+    
+    let nextPage: PageName;
 
-    const nextPage = STORY[currentPage].next(inputText.toLowerCase(), memories, gameState)
+    if (inputText.toLowerCase() === 'help') {
+      nextPage = 'help';
+    }
+    else {
+      nextPage = STORY[currentPage].next(inputText.toLowerCase(), memories, gameState)
+    }
 
     // setGameState(gameState => ({ ...gameState, numTimesAsked: gameState.numTimesAsked + 1 }))
 

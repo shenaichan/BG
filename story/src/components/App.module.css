@@ -3,9 +3,15 @@ body {
 }
 
 .container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 30px;
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 0px 30px;
+  /* padding: 30px; */
+  /* display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  flex-grow: 1; */
 }
 
 .input {
@@ -18,5 +24,14 @@ body {
   font-family: monospace;
   font-size: 14px;
   line-height: 1.5;
+  font-weight: bold;
   outline: none;
+  position: relative;
+  height: 45px;
+  bottom: 0;
+  margin-top: 30px;
+}
+
+p {
+  margin: 15px 0px;
 }

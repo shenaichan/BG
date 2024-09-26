@@ -1,13 +1,24 @@
 import { ChatMessage } from 'components/App'
 import css from './Chat.module.css'
-
+import { useRef, useEffect } from 'react'
 function Chat({ chatHistory }: { chatHistory: ChatMessage[] }) {
+  const chatContainerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
+    }
+  }, [chatHistory])
+  
   return (
-    <div>
+    <div className={css.container} ref={chatContainerRef}>
       {chatHistory.map((message, index) => (
         <div key={index} 
           className={css.chat}
-          style={{ color: message.role === 'player' ? 'lightblue' : 'white' }}
+          style={{ 
+            color: message.role === 'player' ? 'lightblue' : 'white',
+            fontWeight: message.role === 'player' ? 'bold' : 'normal'
+          }}
         >
           {message.content}
         </div>
