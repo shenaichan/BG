@@ -1,0 +1,1 @@
+Small interactive fiction story
