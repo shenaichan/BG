@@ -15,6 +15,8 @@ export type PageName =
   | "because"
   | "help"
   | "look"
+  | "look at toolbox"
+  | "sorry"
 
 export type Page = {
     content: (userInput: string, memories: Memory[], gameState: GameState) => React.ReactNode
@@ -22,7 +24,7 @@ export type Page = {
 }
 
 export const STORY: Record<PageName, Page> = {
-  look: {
+  "look": {
     content: () => {
       return (
         <>
@@ -43,7 +45,7 @@ export const STORY: Record<PageName, Page> = {
       return "look";
     }
   },
-  help: {
+  "help": {
     content: () => {
       return (
         <>
@@ -71,7 +73,7 @@ export const STORY: Record<PageName, Page> = {
       return "help";
     }
   },
-  start: {
+  "start": {
     content: () => {
       return (
         <>
@@ -88,11 +90,18 @@ export const STORY: Record<PageName, Page> = {
           <p>
             You two are sitting in a booth in a Whataburger in the middle of 
             Bumfuck Nowhere, New Mexico.
-            Your car is parked just outside, already 1,000 miles logged on the road trip
-            the two of you have embarked upon.
           </p>
           <p>
-            You are horrifically, irrevocably in love with this girl. The weight of it 
+            This morning you woke up in a panic, disoriented, immersed in an amnesiac
+            haze. You do not remember your name. You do not remember her name. 
+            You do not know how old you are -- twenty-something, perhaps, but the specific year escapes you.
+            You recall your life in fragments -- the vague notion
+            that the two of you are on a road trip, that you are escaping from somewhere,
+            and uneasily heading somewhere else. 
+          </p>
+          <p>
+            Louder than anything else, a thought resounds in your mind:
+            you are horrifically, irrevocably in love with this girl. The weight of it 
             grips you like a drowning man intent on taking you down with him.
           </p>
           <p>
@@ -107,11 +116,13 @@ export const STORY: Record<PageName, Page> = {
     next: (userInput) => {
       if (userInput.includes("why")) {
         return "because";
+      } else if (userInput.includes("look at") && userInput.includes("toolbox")) {
+        return "look at toolbox";
       }
-      return "start";
+      return "sorry";
     }
   },
-  because: {
+  "because": {
     content: () => {
       return (
         <>
@@ -123,6 +134,45 @@ export const STORY: Record<PageName, Page> = {
     },
     next: () => {
       return "because";
+    }
+  },
+  "look at toolbox": {
+    content: () => {
+      return (
+        <>
+          <p>
+            You take your eyes off the beautiful girl in front of you to look at your toolbox. Nice going!
+          </p>
+          <p>
+            You are deeply fond of your toolbox. You've had it since you were a teenager, and it's
+            accompanied you through a great many life transition. It seems to be locked right now.
+          </p>
+          <p>
+            The girl in front of you raises her eyebrows. You had basically begged her to let you take
+            the toolbox in. <em>I'll leave the key in the car</em>, you'd said. An uneasy compromise.
+          </p>
+        </>
+      )
+    },
+    next: () => {
+      return "start";
+    }
+  },
+  "sorry": {
+    content: () => {
+      return (
+        <>
+          <p>
+            That is not something you can do, at least right now.
+          </p>
+        </>
+      )
+    },
+    next: (userInput) => {
+      if (userInput.includes("look at") && userInput.includes("toolbox")) {
+        return "look at toolbox";
+      }
+      return "start";
     }
   },
 };
