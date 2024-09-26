@@ -22,7 +22,7 @@ export type Page = {
 
 export const STORY: Record<PageName, Page> = {
   help: {
-    content: (userInput, memories, gameState) => {
+    content: () => {
       return (
         <>
           <p>
@@ -42,12 +42,12 @@ export const STORY: Record<PageName, Page> = {
         </>
       )
     },
-    next: (userInput, memories, gameState) => {
+    next: () => {
       return "help";
     }
   },
   start: {
-    content: (userInput, memories, gameState) => {
+    content: () => {
       return (
         <>
           <p>
@@ -79,7 +79,7 @@ export const STORY: Record<PageName, Page> = {
         </>
       )
     },
-    next: (userInput, memories, gameState) => {
+    next: (userInput) => {
       if (userInput.includes("why")) {
         return "because";
       }
@@ -87,7 +87,7 @@ export const STORY: Record<PageName, Page> = {
     }
   },
   because: {
-    content: (userInput, memories, gameState) => {
+    content: () => {
       return (
         <>
           <p>
@@ -96,7 +96,7 @@ export const STORY: Record<PageName, Page> = {
         </>
       )
     },
-    next: (userInput, memories, gameState) => {
+    next: () => {
       return "because";
     }
   },

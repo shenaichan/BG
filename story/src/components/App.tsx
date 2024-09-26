@@ -13,8 +13,8 @@ function App() {
   const [inputText, setInputText] = useState<string>('')
   const [currentPage, setCurrentPage] = useState<PageName>('start')
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([])
-  const [memories, setMemories] = useState<Memory[]>([])
-  const [gameState, setGameState] = useState<GameState>({ numTimesAsked: 0 })
+  const [memories] = useState<Memory[]>([])
+  const [gameState] = useState<GameState>({ numTimesAsked: 0 })
 
   useEffect(() => {
     setChatHistory(chatHistory => 
