@@ -1,6 +1,7 @@
 import { ChatMessage } from 'components/App'
 import css from './Chat.module.css'
 import { useRef, useEffect } from 'react'
+
 function Chat({ chatHistory }: { chatHistory: ChatMessage[] }) {
   const chatContainerRef = useRef<HTMLDivElement>(null)
 

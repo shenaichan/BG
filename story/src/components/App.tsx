@@ -14,15 +14,17 @@ function App() {
   const [currentPage, setCurrentPage] = useState<PageName>('start')
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([])
   const [memories] = useState<Memory[]>([])
-  const [gameState] = useState<GameState>({ numTimesAsked: 0 })
+  const [gameState, setGameState] = useState<GameState>({ numTimesLookedAtToolbox: 0 })
 
   useEffect(() => {
+    const [nextContent, nextGameState] = STORY['start'].content("", [], {numTimesLookedAtToolbox: 0})
     setChatHistory(
       [
         { role: 'narrator', 
-          content: STORY['start'].content(inputText, memories, gameState) 
+          content: nextContent 
         }
       ])
+    setGameState(nextGameState)
   }, [])
 
   function submitText() {
@@ -33,23 +35,41 @@ function App() {
         }
       ])
     
-    if (inputText.toLowerCase() === 'help' || inputText.toLowerCase() === 'look') {
+    const lowerInputText = inputText.toLowerCase()
+    
+    if (lowerInputText === 'help' || lowerInputText === 'look') {
+      const [nextContent, nextGameState] = STORY[lowerInputText as PageName].content(lowerInputText, memories, gameState) 
       setChatHistory(chatHistory => 
         [...chatHistory, 
           { role: 'narrator', 
-            content: STORY[inputText.toLowerCase() as PageName].content(inputText, memories, gameState) 
+            content: nextContent
           }
         ])
+      setGameState(nextGameState)
+    } else if (lowerInputText.includes("look at toolbox")) {
+      const [nextContent, nextGameState] = STORY[lowerInputText as PageName].content(lowerInputText, memories, gameState)
+      setChatHistory(chatHistory => 
+        [...chatHistory, 
+          { role: 'narrator', 
+            content: nextContent 
+          }
+        ])
+      setGameState(nextGameState)
+      // update state in content
+      
+
     }
     else {
-      const nextPage = STORY[currentPage].next(inputText.toLowerCase(), memories, gameState)
+      const nextPage = STORY[currentPage].next(lowerInputText, memories, gameState)
+      const [nextContent, nextGameState] = STORY[lowerInputText as PageName].content(lowerInputText, memories, gameState)
       setCurrentPage(nextPage)
       setChatHistory(chatHistory => 
         [...chatHistory, 
           { role: 'narrator', 
-            content: STORY[nextPage].content(inputText, memories, gameState) 
+            content: nextContent 
           }
         ])
+      setGameState(nextGameState)
     }
 
     // setGameState(gameState => ({ ...gameState, numTimesAsked: gameState.numTimesAsked + 1 }))

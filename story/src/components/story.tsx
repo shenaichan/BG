@@ -1,13 +1,23 @@
 import React from 'react'
 import css from 'components/Story.module.css'
 
+/**
+ * - make a field in the gamestate object
+ * - numTimesLookedAtToolbox
+ * - update this correctly, so whenever we enter the page "look at toolbox"
+ * - increment this += 1
+ * - edit the content field of look at toolbox to be dependent on numTimes
+ * - You've sure looked at that toolbox a lot. Have you lost something?
+ * - Your date is getting worried.
+ */
+
 export type Memory =
     "memory1"
   | "memory2"
   | "memory3"
 
 export type GameState = {
-  numTimesAsked: number
+  numTimesLookedAtToolbox: number
 }
 
 export type PageName = 
@@ -19,15 +29,15 @@ export type PageName =
   | "sorry"
 
 export type Page = {
-    content: (userInput: string, memories: Memory[], gameState: GameState) => React.ReactNode
+    content: (userInput: string, memories: Memory[], gameState: GameState) => [html: React.ReactNode, gameState: GameState]
     next: (userInput: string, memories: Memory[], gameState: GameState) => PageName
 }
 
 export const STORY: Record<PageName, Page> = {
   "look": {
-    content: () => {
+    content: (userInput, memories, gameState) => {
       return (
-        <>
+        [<>
           <p>
             You are in a Whataburger in Bumfuck Nowhere, New Mexico.
           </p>
@@ -38,7 +48,8 @@ export const STORY: Record<PageName, Page> = {
             You notice the table is slightly sticky. There are two menus, two glasses of water, two mugs, and a steaming pot of coffee in front of you.
             Also on the table are your keys, your phone, and your wallet. Next to you on the booth is a toolbox.
           </p>
-        </>
+        </>,
+        gameState]
       )
     },
     next: () => {
@@ -46,9 +57,9 @@ export const STORY: Record<PageName, Page> = {
     }
   },
   "help": {
-    content: () => {
+    content: (userInput, memories, gameState) => {
       return (
-        <>
+        [<>
           <p>
             No worries, talking to girls is hard.
           </p>
@@ -66,7 +77,8 @@ export const STORY: Record<PageName, Page> = {
               </li>
             </ul>
           </p>
-        </>
+        </>,
+        gameState]
       )
     },
     next: () => {
@@ -74,9 +86,9 @@ export const STORY: Record<PageName, Page> = {
     }
   },
   "start": {
-    content: () => {
+    content: (userInput, memories, gameState) => {
       return (
-        <>
+        [<>
           <p>
             You are <span className={css.highlight}>not very good at talking to girls</span>. You remind yourself that 
             you are, in fact, a girl yourself -- but this does not really seem to 
@@ -91,7 +103,7 @@ export const STORY: Record<PageName, Page> = {
             You two are sitting in a booth in a Whataburger in the middle of 
             Bumfuck Nowhere, New Mexico.
           </p>
-          <p>
+          {/* <p>
             This morning you woke up in a panic, disoriented, immersed in an amnesiac
             haze. You do not remember your name. You do not remember her name. 
             You do not know how old you are -- twenty-something, perhaps, but the specific year escapes you.
@@ -103,14 +115,15 @@ export const STORY: Record<PageName, Page> = {
             Louder than anything else, a thought resounds in your mind:
             you are horrifically, irrevocably in love with this girl. The weight of it 
             grips you like a drowning man intent on taking you down with him.
-          </p>
+          </p> */}
           <p>
             What will you do next?
           </p>
           <p className={css.ooc}>
             For new players, feel free to write "help" for ideas on how to proceed.
           </p>
-        </>
+        </>, 
+        gameState]
       )
     },
     next: (userInput) => {
@@ -123,13 +136,14 @@ export const STORY: Record<PageName, Page> = {
     }
   },
   "because": {
-    content: () => {
+    content: (userInput, memories, gameState) => {
       return (
-        <>
+        [<>
           <p>
             Because that's who you are.
           </p>
-        </>
+        </>,
+        gameState]
       )
     },
     next: () => {
@@ -137,9 +151,15 @@ export const STORY: Record<PageName, Page> = {
     }
   },
   "look at toolbox": {
-    content: () => {
+    content: (userInput, memories, gameState) => {
+      const nextGameState = {...gameState, numTimesLookedAtToolbox: gameState.numTimesLookedAtToolbox + 1}
       return (
-        <>
+        [<>
+          <p>
+            You've sure looked at that toolbox a lot. {nextGameState.numTimesLookedAtToolbox} times, even. 
+            Have you lost something?
+            Your date is getting worried.
+          </p>
           <p>
             You take your eyes off the beautiful girl in front of you to look at your toolbox. Nice going!
           </p>
@@ -151,7 +171,8 @@ export const STORY: Record<PageName, Page> = {
             The girl in front of you raises her eyebrows. You had basically begged her to let you take
             the toolbox in. <em>I'll leave the key in the car</em>, you'd said. An uneasy compromise.
           </p>
-        </>
+        </>,
+        nextGameState]
       )
     },
     next: () => {
@@ -159,13 +180,14 @@ export const STORY: Record<PageName, Page> = {
     }
   },
   "sorry": {
-    content: () => {
+    content: (userInput, memories, gameState) => {
       return (
-        <>
+        [<>
           <p>
             That is not something you can do, at least right now.
           </p>
-        </>
+        </>, 
+        gameState]
       )
     },
     next: (userInput) => {
