@@ -4,9 +4,9 @@ import css from 'components/Story.module.css'
 /**
  * - make a field in the gamestate object
  * - numTimesLookedAtToolbox
- * - update this correctly, so whenever we enter the page "look at toolbox"
+ * - update this correctly, so whenever we enter the page "look toolbox"
  * - increment this += 1
- * - edit the content field of look at toolbox to be dependent on numTimes
+ * - edit the content field of look toolbox to be dependent on numTimes
  * - You've sure looked at that toolbox a lot. Have you lost something?
  * - Your date is getting worried.
  */
@@ -25,7 +25,9 @@ export type PageName =
   | "because"
   | "help"
   | "look"
-  | "look at toolbox"
+  | "look toolbox"
+  | "look girl"
+  | "examine girl"
   | "sorry"
 
 export type Page = {
@@ -35,18 +37,24 @@ export type Page = {
 
 export const STORY: Record<PageName, Page> = {
   "look": {
-    content: (userInput, memories, gameState) => {
+    content: (_userInput, _memories, gameState) => {
+      
       return (
         [<>
           <p>
             You are in a Whataburger in Bumfuck Nowhere, New Mexico.
           </p>
           <p>
-            Across from you sits a girl smiling at you pleasantly. She is looking at you expectantly.
+            Across from you sits a <span className={css.highlight}>girl</span>. She is smiling at you expectantly.
           </p>
           <p>
-            You notice the table is slightly sticky. There are two menus, two glasses of water, two mugs, and a steaming pot of coffee in front of you.
-            Also on the table are your keys, your phone, and your wallet. Next to you on the booth is a toolbox.
+            You notice the table is slightly sticky. There are two <span className={css.highlight}>menus</span>, 
+            two <span className={css.highlight}>glasses of water</span>, 
+            two mugs, and a steaming pot of coffee in front of you.
+            Also on the table are your <span className={css.highlight}>keys</span>, 
+            your <span className={css.highlight}>phone</span>, and 
+            your <span className={css.highlight}>wallet</span>.
+            Next to you on the booth is a <span className={css.highlight}>toolbox</span>.
           </p>
         </>,
         gameState]
@@ -57,7 +65,7 @@ export const STORY: Record<PageName, Page> = {
     }
   },
   "help": {
-    content: (userInput, memories, gameState) => {
+    content: (_userInput, _memories, gameState) => {
       return (
         [<>
           <p>
@@ -86,16 +94,16 @@ export const STORY: Record<PageName, Page> = {
     }
   },
   "start": {
-    content: (userInput, memories, gameState) => {
+    content: (_userInput, _memories, gameState) => {
       return (
         [<>
           <p>
-            You are <span className={css.highlight}>not very good at talking to girls</span>. You remind yourself that 
+            You are not very good at talking to girls. You remind yourself that 
             you are, in fact, a girl yourself -- but this does not really seem to 
             have any effect on the fact that you are not very good at talking to girls.
           </p>
           <p>
-            Nevertheless, there is a girl sitting in front of you. She is happy 
+            Nevertheless, there is a <span className={css.highlight}>girl</span> sitting in front of you. She is happy 
             to be here with you; she has told you as much. You do not entirely 
             believe this.
           </p>
@@ -130,13 +138,13 @@ export const STORY: Record<PageName, Page> = {
       if (userInput.includes("why")) {
         return "because";
       } else if (userInput.includes("look at") && userInput.includes("toolbox")) {
-        return "look at toolbox";
+        return "look toolbox";
       }
       return "sorry";
     }
   },
   "because": {
-    content: (userInput, memories, gameState) => {
+    content: (_userInput, _memories, gameState) => {
       return (
         [<>
           <p>
@@ -150,8 +158,8 @@ export const STORY: Record<PageName, Page> = {
       return "because";
     }
   },
-  "look at toolbox": {
-    content: (userInput, memories, gameState) => {
+  "look toolbox": {
+    content: (_userInput, _memories, gameState) => {
       const nextGameState = {...gameState, numTimesLookedAtToolbox: gameState.numTimesLookedAtToolbox + 1}
       return (
         [<>
@@ -179,8 +187,49 @@ export const STORY: Record<PageName, Page> = {
       return "start";
     }
   },
+  "look girl": {
+    content: (_userInput, _memories, gameState) => {
+      const nextGameState = {...gameState, numTimesLookedAtToolbox: gameState.numTimesLookedAtToolbox + 1}
+      return (
+        [<>
+          <p>
+            Well, I guess you could just look -- you might have better luck learning more
+            if you <span className={css.highlight}>compliment</span> her, though!
+          </p>
+          <p>
+            You see a girl. She has long, wavy, blonde hair. 
+            Her eyes somehow look simultaneously focused on you and on something far away.
+          </p>
+        </>,
+        nextGameState]
+      )
+    },
+    next: () => {
+      return "start";
+    }
+  },
+  "examine girl": {
+    content: (_userInput, _memories, gameState) => {
+      const nextGameState = {...gameState, numTimesLookedAtToolbox: gameState.numTimesLookedAtToolbox + 1}
+      return (
+        [<>
+          <p>
+            Have you no manners? Who just goes around <em>examining</em> people?
+          </p>
+          <p>
+            You might have better luck learning more
+            if you <span className={css.highlight}>compliment</span> her!
+          </p>
+        </>,
+        nextGameState]
+      )
+    },
+    next: () => {
+      return "start";
+    }
+  },
   "sorry": {
-    content: (userInput, memories, gameState) => {
+    content: (_userInput, _memories, gameState) => {
       return (
         [<>
           <p>
@@ -192,7 +241,7 @@ export const STORY: Record<PageName, Page> = {
     },
     next: (userInput) => {
       if (userInput.includes("look at") && userInput.includes("toolbox")) {
-        return "look at toolbox";
+        return "look toolbox";
       }
       return "sorry";
     }

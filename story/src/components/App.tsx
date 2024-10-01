@@ -46,8 +46,25 @@ function App() {
           }
         ])
       setGameState(nextGameState)
-    } else if (lowerInputText.includes("look at toolbox")) {
-      const [nextContent, nextGameState] = STORY['look at toolbox'].content(lowerInputText, memories, gameState)
+    } else if (lowerInputText.includes("look") || lowerInputText.startsWith("l ") ||
+               lowerInputText.includes("examine") || lowerInputText.startsWith("x ")) {
+
+      let obj = ""
+      if (lowerInputText.includes("toolbox")) {
+        obj = "toolbox"
+      } else if (lowerInputText.includes("girl")) {
+        obj = "girl"
+      }
+      
+      let nextPage = ""
+      if (lowerInputText.includes("girl") && 
+          (lowerInputText.includes("examine") || lowerInputText.startsWith("x "))) {
+          nextPage = "examine girl"
+      } else {
+        nextPage = `look ${obj}`
+      }
+
+      const [nextContent, nextGameState] = STORY[nextPage as PageName].content(lowerInputText, memories, gameState)
       setChatHistory(chatHistory => 
         [...chatHistory, 
           { role: 'narrator', 
