@@ -169,7 +169,7 @@ export const STORY: Record<PageName, Page> = {
           </p>
           <p>
             The girl in front of you raises her eyebrows. You had basically begged her to let you take
-            the toolbox in. <em>I'll leave the key in the car</em>, you'd said. An uneasy compromise.
+            the toolbox in. <em>I'll leave the <span className={css.highlight}>key</span> in the <span className={css.highlight}>car</span></em>, you'd said. An uneasy compromise.
           </p>
         </>,
         nextGameState]
@@ -194,7 +194,7 @@ export const STORY: Record<PageName, Page> = {
       if (userInput.includes("look at") && userInput.includes("toolbox")) {
         return "look at toolbox";
       }
-      return "start";
+      return "sorry";
     }
   },
 };

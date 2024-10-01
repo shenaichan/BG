@@ -17,7 +17,7 @@ function Chat({ chatHistory }: { chatHistory: ChatMessage[] }) {
         <div key={index} 
           className={css.chat}
           style={{ 
-            color: message.role === 'player' ? 'lightblue' : 'white',
+            color: message.role === 'player' ? 'blue' : 'black',
             fontWeight: message.role === 'player' ? 'bold' : 'normal'
           }}
         >

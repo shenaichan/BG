@@ -17,7 +17,7 @@ function App() {
   const [gameState, setGameState] = useState<GameState>({ numTimesLookedAtToolbox: 0 })
 
   useEffect(() => {
-    const [nextContent, nextGameState] = STORY['start'].content("", [], {numTimesLookedAtToolbox: 0})
+    const [nextContent, nextGameState] = STORY[currentPage].content("", [], {numTimesLookedAtToolbox: 0})
     setChatHistory(
       [
         { role: 'narrator', 
@@ -47,7 +47,7 @@ function App() {
         ])
       setGameState(nextGameState)
     } else if (lowerInputText.includes("look at toolbox")) {
-      const [nextContent, nextGameState] = STORY[lowerInputText as PageName].content(lowerInputText, memories, gameState)
+      const [nextContent, nextGameState] = STORY['look at toolbox'].content(lowerInputText, memories, gameState)
       setChatHistory(chatHistory => 
         [...chatHistory, 
           { role: 'narrator', 
@@ -61,7 +61,7 @@ function App() {
     }
     else {
       const nextPage = STORY[currentPage].next(lowerInputText, memories, gameState)
-      const [nextContent, nextGameState] = STORY[lowerInputText as PageName].content(lowerInputText, memories, gameState)
+      const [nextContent, nextGameState] = STORY[nextPage].content(lowerInputText, memories, gameState)
       setCurrentPage(nextPage)
       setChatHistory(chatHistory => 
         [...chatHistory, 
